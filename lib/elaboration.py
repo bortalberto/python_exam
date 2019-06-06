@@ -21,7 +21,7 @@ class Run:
     def __init__(self, run_path, mode="TL"):
         """
         This class contains the data taken in each run and the chips configurations
-        TL stands for TriggerLess mode (in this mode, the chip send a continuous stream of data)
+        I decided to not automatize the mode selection because I want to keep the user aware of the mode in use.
         """
         self.run_path = run_path
         self._directory_check()
