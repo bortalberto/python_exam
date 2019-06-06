@@ -1,0 +1,19 @@
+Wed Jun  5 15:51:01 2019 -- Acquiring from GEMROC 0 in TM mode
+Wed Jun  5 15:51:01 2019 -- Saving data from  GEMROC 0 in file ./data_folder/RUN_11/SubRUN_2_GEMROC_0_TM.dat
+Wed Jun  5 15:51:01 2019 -- Finished saving data from  GEMROC 0 in file ./data_folder/RUN_11/SubRUN_2_GEMROC_0_TM.dat, total packets= 97349
+Wed Jun  5 15:51:12 2019 -- GEMROC 0 TIGER 3 : 16777215 8/10 bit errors in the last 10 seconds
+Wed Jun  5 15:51:12 2019 -- GEMROC 0 TIGER 3 disabled
+Wed Jun  5 15:51:12 2019 -- GEMROC 0 TIGER 1 : 16777215 8/10 bit errors in the last 10 seconds
+Wed Jun  5 15:51:12 2019 -- GEMROC 0 TIGER 1 disabled
+Wed Jun  5 15:51:12 2019 -- GEMROC 0 TIGER 2 : 16777215 8/10 bit errors in the last 10 seconds
+Wed Jun  5 15:51:12 2019 -- GEMROC 0 TIGER 2 disabled
+Wed Jun  5 15:51:12 2019 -- GEMROC 0 TIGER 4 : 16777215 8/10 bit errors in the last 10 seconds
+Wed Jun  5 15:51:12 2019 -- GEMROC 0 TIGER 4 disabled
+Wed Jun  5 15:51:12 2019 -- GEMROC 0 TIGER 6 : 16777215 8/10 bit errors in the last 10 seconds
+Wed Jun  5 15:51:12 2019 -- GEMROC 0 TIGER 6 disabled
+Wed Jun  5 15:51:12 2019 -- GEMROC 0 TIGER 4 : 16777215 8/10 bit errors in the last 10 seconds
+Wed Jun  5 15:51:12 2019 -- GEMROC 0 TIGER 5 : 16777215 8/10 bit errors in the last 10 seconds
+Wed Jun  5 15:51:12 2019 -- GEMROC 0 TIGER 5 disabled
+Wed Jun  5 15:51:12 2019 -- GEMROC 0 TIGER 6 : 16777215 8/10 bit errors in the last 10 seconds
+Wed Jun  5 15:51:12 2019 -- GEMROC 0 TIGER 7 : 16777215 8/10 bit errors in the last 10 seconds
+Wed Jun  5 15:51:12 2019 -- GEMROC 0 TIGER 7 disabled
