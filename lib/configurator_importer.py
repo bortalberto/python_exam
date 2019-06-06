@@ -15,18 +15,17 @@ else:
 
 
 class Run_Configuration:
+
     def __init__(self, run_path):
         """
-        This class contains the data taken in each run and the chips configurations
-        TL stands for TriggerLess mode (in this mode, the chip send a continous stream of data)
+        This class contains the electronics configurations
         """
         self.run_path = run_path
-        self.conf_dict=self._build_subruns_configurations()
+        self.conf_dict = self._build_subruns_configurations()
 
     def _build_subruns_configurations(self):
         """
         Run into the run_folder building a nested dictionary containing all the sub runs configurations
-
         """
         sub_run_dict = {}
         for conf_file, (subrun_number,) in glob2.iglob(self.run_path + sep + "CONF_log_*.pkl", with_matches=True):

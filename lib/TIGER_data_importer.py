@@ -2,7 +2,6 @@ import os
 import glob2
 import pandas as pd
 import sys
-import time
 
 """
 Checks for the OS and select the correct separator
@@ -146,15 +145,15 @@ def _assign_frameword_group(data):
 def _find_previous_frameword (data,row):
     """
     Find the frameword correlated with the hit.
-    If T_coarse is greater than half of it's range, it will take the last odd frameword, otherwise the last even frameword.
+    If T_coarse is greater than half of it's range, it will take the last odd frameword, otherwise the last even frameword. Some variables are explicit for clarify their role
     """
     T_coarse = (row["T_coarse"])
     hit_word_number = (row["word_number"])
-    last_framewords = data.loc[(data["word_type"] == "frame") & (data["word_number"] < hit_word_number)].tail(2)["frame_count"].values
+    last_framewords = data.loc[(data["word_type"] == "frame") & (data["word_number"] < hit_word_number)].tail(2)["frame_count"].values  # We need the last two framewords to search for the right one
     if row["word_type"] == "hit":
-        if len(last_framewords) > 1:
+        if len(last_framewords) > 1:  # We need at least 2 frameword to be sure that we are doing the right assignment
             if last_framewords[0] % 2 == 0:
-                if T_coarse<0xFFFF/2:
+                if T_coarse<0xFFFF/2:  # The frameword to assign depends by this value
                     row["frame_count"] = last_framewords[0]
                 else:
                     row["frame_count"] = last_framewords[1]
