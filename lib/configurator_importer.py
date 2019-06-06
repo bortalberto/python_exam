@@ -31,7 +31,6 @@ class Run_Configuration:
         for conf_file, (subrun_number,) in glob2.iglob(self.run_path + sep + "CONF_log_*.pkl", with_matches=True):
             with open(conf_file, 'rb') as f:
                 sub_run_dict["sub_run {}".format(subrun_number)] = pickle.load(f)
-
         return sub_run_dict
 
 

@@ -45,11 +45,11 @@ class Run_Data_TL:
             # For first, runs a couple of checks on the file
             if mode != self.mode:
                 raise Exception("Wrong trigger mode (got {}), maybe you want to use the other mode?".format(mode))
-            file_size = os.stat(hit_file).st_size # Reads the number of Bytes in the file
-            if file_size%8 != 0:
+            file_size = os.stat(hit_file).st_size  # Reads the number of Bytes in the file
+            if file_size % 8 != 0:
                 raise Exception("The file length is not a multiple of 8 Bytes, something bad happen saving the file")
             with open(hit_file, 'rb') as fi:
-                word_number=0
+                word_number = 0
                 while True:  # Reads all the file. If TIGER_word_raw is empty, the end of the file is reached, each event is parsed into a dictionary and put in the global list
                     TIGER_word_raw = fi.read(8)
                     if not TIGER_word_raw:
@@ -59,8 +59,8 @@ class Run_Data_TL:
                         "word_number":  int(word_number),
                         "sub_run":      int(subrun_number),
                         "GEMROC":       int(gemroc_number),
-                    }
-                    event_word_dict.update(self._parser(TIGER_word_raw))  # Add the hit informations to the generic word informations
+                    }  # Generic information for each word
+                    event_word_dict.update(self._parser(TIGER_word_raw))  # Add the hit information to the generic word information
 
                     word_list.append(event_word_dict)
         return word_list
@@ -77,7 +77,7 @@ class Run_Data_TL:
         """
         this_word = {}
         reversed_data = (list(reversed(data)))  # Swaps the byte order
-        if (reversed_data[0]>>5) == 1:  # It's a frameword
+        if (reversed_data[0] >> 5) == 1:  # It's a frameword
             this_word = {
                 "word_type":    "frame",
                 "TIGER":         (reversed_data[0]) & 0x7,
@@ -85,7 +85,7 @@ class Run_Data_TL:
                 "SEU_count":    (reversed_data[6] << 8 | reversed_data[7]) & 0x7FFF
             }
 
-        if (reversed_data[0]>>5) == 0:  # It's a hit
+        if (reversed_data[0] >> 5) == 0:  # It's a hit
             this_word = {
                 "word_type":    "hit",
                 "TIGER":        (reversed_data[0]) & 0x7,
@@ -97,7 +97,7 @@ class Run_Data_TL:
                 "E_fine":       (reversed_data[6] << 8 | reversed_data[7]) & 0x3FF
 
             }
-        if (reversed_data[0]>>5) == 2:  # It's a countword
+        if (reversed_data[0] >> 5) == 2:  # It's a countword
             # not used up to now
             raise Exception("Count word found, but they are not in use, maybe something went wrong in the data transmission or in the parsing")
         return this_word
@@ -109,40 +109,41 @@ class Run_Data_TL:
         """
         self.hit_df = self.hit_df.groupby(["sub_run", "GEMROC"], as_index=False).apply(_assign_frameword_group)
         self.hit_df = self.hit_df.groupby(["sub_run", "GEMROC"], as_index=False).apply(_remove_orphan_words)
-        self.hit_df = self.hit_df.reset_index()
-        self.hit_df.drop(self.hit_df.columns[0:2], axis=1)
+        self.hit_df = self.hit_df.reset_index()  # Reset the index after the rows drops
+        self.hit_df.drop(self.hit_df.columns[0:2], axis=1)  # The grouping and the re-indexing created two unnecessary columns, deleted here
 
     def save_dataframe(self):
         """
-        In order to speed up the operations, the data can be saved and loaded
+        In order to speed up the operations, the data can be saved and loaded using the pickle extension (already integrated in pandas)
         """
         self.hit_df.to_pickle(self.run_path + sep + "pandas_df_save")
 
     def load_dataframe(self):
         """
-        In order to speed up the operations, the data can be saved and loaded
+        In order to speed up the operations, the data can be saved and loaded using the pickle extension (already integrated in pandas)
         """
         self.hit_df = pd.read_pickle(self.run_path + sep + "pandas_df_save")
 
 
 def _remove_orphan_words(data):
     """
-    Remove the hit and the frameword unusefull for the beginning and the end of the data
+    Removes the hits without the reference frameword and the frameword from the beginning and the end of the data
     """
     data = data[data.frame_count.isnull() == False]
-    # data.drop(data.columns[0], axis=1, inplace=True)
     return data[1:-1]
 
 
 def _assign_frameword_group(data):
     """
     This function exist only to apply the function  "_find_previous_frameword" to each row of the data frame
+    Passing the slice of the data before the row instead of the whole data saves some time (around ~10%).
+    I wasn't able to improve further the time request, because it seems connected with the operation of modify the rows one by one
     """
     data = data.apply(lambda row: _find_previous_frameword(data[:row.name], row), axis=1)
     return data
 
 
-def _find_previous_frameword (data,row):
+def _find_previous_frameword(data, row):
     """
     Find the frameword correlated with the hit.
     If T_coarse is greater than half of it's range, it will take the last odd frameword, otherwise the last even frameword. Some variables are explicit for clarify their role
@@ -153,12 +154,12 @@ def _find_previous_frameword (data,row):
     if row["word_type"] == "hit":
         if len(last_framewords) > 1:  # We need at least 2 frameword to be sure that we are doing the right assignment
             if last_framewords[0] % 2 == 0:
-                if T_coarse<0xFFFF/2:  # The frameword to assign depends by this value
+                if T_coarse < 0xFFFF/2:  # The frameword to assign depends by this value
                     row["frame_count"] = last_framewords[0]
                 else:
                     row["frame_count"] = last_framewords[1]
             else:
-                if T_coarse<0xFFFF/2:
+                if T_coarse < 0xFFFF/2:
                     row["frame_count"] = last_framewords[1]
                 else:
                     row["frame_count"] = last_framewords[0]
@@ -187,7 +188,7 @@ class Run_Data_TM(Run_Data_TL):
             this_word = {
                 "word_type": "hit",
                 "TIGER": (reversed_data[0] >> 3) & 0x7,
-                "Channel": (reversed_data[1]>>2) & 0x3F,
+                "Channel": (reversed_data[1] >> 2) & 0x3F,
                 "TAC": (reversed_data[1]) & 0x3,
                 "T_coarse": (reversed_data[2] << 8 | reversed_data[3] | reversed_data[4] >> 8) & 0xFFFF,
                 "E_coarse": (reversed_data[4] << 4 | reversed_data[5] >> 4) & 0x3FF,

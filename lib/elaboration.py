@@ -71,7 +71,7 @@ class Run:
             number_of_frameword = (this_gemroc_data[(this_gemroc_data["word_type"] == "frame") & (this_gemroc_data["sub_run"] == sub_run)].count()["frame_count"])
             total_TP = number_of_frameword * number_of_TP_per_frame
             total_hit = this_gemroc_data[(this_gemroc_data["word_type"] == "hit") & (this_gemroc_data["sub_run"] == sub_run)].count()["Channel"]   # Count the number of hits
-            print ("Efficiency with {} TPs: {}".format(number_of_TP_per_frame, total_hit/total_TP))  # print efficiency
+            print("Efficiency with {} TPs: {}".format(number_of_TP_per_frame, total_hit/total_TP))  # print efficiency
 
 
 if __name__ == "__main__":
