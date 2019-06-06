@@ -105,7 +105,7 @@ class Run_Data_TL:
     def assign_frameword_to_hit(self):
         """
         This function assign at each hit, the correspondent frameword. The "orphan" hits are deleted (the first few hits in every subrun)
-        The data are divided group by hardware and sub_run, the "apply" function apply the functions to every group like it is a separate dataframe
+        The data are divided group by hardware and sub_run, the "apply" function apply the functions to every group like it is a separate dataframe.
         """
         self.hit_df = self.hit_df.groupby(["sub_run", "GEMROC"], as_index=False).apply(_assign_frameword_group)
         self.hit_df = self.hit_df.groupby(["sub_run", "GEMROC"], as_index=False).apply(_remove_orphan_words)
