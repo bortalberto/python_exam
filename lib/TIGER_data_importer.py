@@ -110,7 +110,7 @@ class Run_Data_TL:
         self.hit_df = self.hit_df.groupby(["sub_run", "GEMROC"], as_index=False).apply(_assign_frameword_group)
         self.hit_df = self.hit_df.groupby(["sub_run", "GEMROC"], as_index=False).apply(_remove_orphan_words)
         self.hit_df = self.hit_df.reset_index()  # Reset the index after the rows drops
-        self.hit_df.drop(self.hit_df.columns[0:2], axis=1)  # The grouping and the re-indexing created two unnecessary columns, deleted here
+        self.hit_df.drop(self.hit_df.columns[0:2], axis=1, inplace=True)  # The grouping and the re-indexing created two unnecessary columns, deleted here
 
     def save_dataframe(self):
         """
